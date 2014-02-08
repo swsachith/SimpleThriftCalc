@@ -1,4 +1,4 @@
-package lk.swithana.calculator;
+package lk.swithana.calculator.server;
 
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TTransportException;
