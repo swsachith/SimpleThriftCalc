@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 /**
  * Created by swithana on 2/8/14.
  */
-public class CalculatorTestCase {
-    private final Logger logger = Logger.getLogger(CalculatorTestCase.class);
+public class CalculatorBasicTestCase {
+    private final Logger logger = Logger.getLogger(CalculatorBasicTestCase.class);
 
     private CalculatorClient client;
     private CalculatorServer server;
