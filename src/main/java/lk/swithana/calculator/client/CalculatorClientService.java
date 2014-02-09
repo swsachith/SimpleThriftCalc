@@ -14,28 +14,30 @@ import org.apache.thrift.transport.TTransportException;
  * Created by swithana on 2/8/14.
  */
 public class CalculatorClientService {
-    private final Logger logger = Logger.getLogger(CalculatorServer.class);
+    private final Logger logger = Logger.getLogger(CalculatorService.class);
 
     private TTransport transport;
 
-    public CalculatorService.Client init(){
+    public CalculatorService.Client init() {
+        CalculatorService.Client client = null;
         try {
-            transport = new TSocket("localhost", 9090);
+            logger.info("Initializing the client ...");
+            transport = new TSocket("localhost", 9888);
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(transport);
-            CalculatorService.Client client = new CalculatorService.Client(protocol);
+            client = new CalculatorService.Client(protocol);
 
-            return client;
+            logger.info("client initiation complete ...");
         } catch (TTransportException e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         } catch (TException x) {
-            x.printStackTrace();
+            logger.error(x.toString());
         }
-        return null;
+        return client;
     }
 
-    public void close(){
+    public void close() {
         transport.close();
     }
 }

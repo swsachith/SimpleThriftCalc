@@ -19,16 +19,22 @@ public class CalculatorClient {
         client = clientService.init();
     }
 
-    public void add(int a , int b) {
+    public int add(int a, int b) {
+        int result = 0;
         try {
-            logger.info("Client: Adding "+a +" and "+b);
-            int result = client.add(a, b);
+            logger.info("Client: Adding " + a + " and " + b);
+            if (client == null)
+                logger.info("client is null ...");
+            result = client.add(a, b);
             logger.info("Client: Result " + result);
+
         } catch (TException e) {
             logger.error(e.toString());
         }
+        return result;
     }
-    public void closeClient(){
+
+    public void closeClient() {
         clientService.close();
     }
 }

@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 /**
  * Created by swithana on 2/8/14.
  */
-public class CalculatorServer implements CalculatorService.Iface{
+public class CalculatorServer implements CalculatorService.Iface, Runnable{
     private final Logger logger = Logger.getLogger(CalculatorServer.class);
 
     public int add(int a, int b) {
@@ -33,7 +33,8 @@ public class CalculatorServer implements CalculatorService.Iface{
         return a * b;
     }
 
-    public void initialize(){
+    @Override
+    public void run(){
         try {
             TServerSocket serverTransport = new TServerSocket(9888);
             CalculatorService.Processor processor =
@@ -42,7 +43,7 @@ public class CalculatorServer implements CalculatorService.Iface{
             args1.processor(processor);
             TServer server = new TThreadPoolServer(args1);
 
-            System.out.println("Started service successfully...");
+            log("Started service successfully...");
             server.serve();
         } catch (TTransportException e) {
             e.printStackTrace();
@@ -52,4 +53,6 @@ public class CalculatorServer implements CalculatorService.Iface{
     private void log(String message){
         logger.info(message);
     }
+
+
 }
