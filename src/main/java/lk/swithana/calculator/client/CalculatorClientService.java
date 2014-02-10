@@ -1,6 +1,5 @@
 package lk.swithana.calculator.client;
 
-import lk.swithana.calculator.server.CalculatorServer;
 import lk.swithana.calculator.server.CalculatorService;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
@@ -11,6 +10,10 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * Created by swithana on 2/8/14.
  */
@@ -18,6 +21,8 @@ public class CalculatorClientService {
     private final Logger logger = Logger.getLogger(CalculatorService.class);
 
     private TTransport transport;
+    private String clientTrustStore;
+    private String truststorePassword;
 
     public CalculatorService.Client init() {
         CalculatorService.Client client = null;
@@ -40,12 +45,22 @@ public class CalculatorClientService {
 
     public CalculatorService.Client secure_init() {
         CalculatorService.Client client = null;
+        logger.info("Initializing the Secure Client ...");
+
         try {
-            logger.info("Initializing the Secure Client ...");
+            //reading the property file
+            //reading the property file
+            Properties properties = new Properties();
+            InputStream inputStream = this.getClass().getResourceAsStream("/client.properties");
+            properties.load(inputStream);
+
+            clientTrustStore = properties.getProperty("client.truststore");
+            truststorePassword = properties.getProperty("truststore.password");
+
 
             TSSLTransportFactory.TSSLTransportParameters params =
                     new TSSLTransportFactory.TSSLTransportParameters();
-            params.setTrustStore("/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/bin/truststore.jks", "*******");
+            params.setTrustStore(clientTrustStore, truststorePassword);
             transport = TSSLTransportFactory.getClientSocket("localhost", 4030, 10000, params);
 
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -56,6 +71,8 @@ public class CalculatorClientService {
             logger.error(e.toString());
         } catch (TException e) {
             logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error("Can't read serverProperties " + e.toString());
         }
         return client;
     }
