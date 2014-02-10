@@ -49,7 +49,6 @@ public class CalculatorClientService {
 
         try {
             //reading the property file
-            //reading the property file
             Properties properties = new Properties();
             InputStream inputStream = this.getClass().getResourceAsStream("/client.properties");
             properties.load(inputStream);
